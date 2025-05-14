@@ -1,5 +1,12 @@
 <div class="container">
     <div>
+        <p>{{scoreTxt}} {{score}}</p>
+        <div class="lifes" *ngFor="let _ of Array(lifes).fill(0)" >
+            <img class="life" src="/imgs/lifes.png" alt="heart-image">
+        </div>
+        
+    </div>
+    <div>
         <h1>{{ titleTxt }}</h1>
         <h2>{{ letters }}</h2>
     </div>
@@ -9,6 +16,21 @@
             <input type="text" [(ngModel)]="userWord">
         </div>
         <input type="text" name="music" [(ngModel)]="music" (ngModelChange)="autocomplete(music)">
-        <button>{{ sendTxt }}</button>
+        <ul>
+            <li *ngFor="let result of songs">
+              <span (click)="selectedSong(result)">{{ result }}</span>
+            </li>
+        </ul>
+        <button (click)="checkUserInput()">{{ sendTxt }}</button>
+    </div>
+    <div *ngIf="won">
+        <h1>{{winTxt}}</h1>
+        <button (click)="nextLevel()">{{nextTxt}}</button>
+
+    </div>
+    <div *ngIf="lost">
+        <h1>{{lostTxt}}</h1>
+        <p>{{lostScore}} {{score}}</p>
+        <button (click)="playAgain()">{{playAgainTxt}}</button>
     </div>
 </div>
