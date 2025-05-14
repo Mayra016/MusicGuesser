@@ -1,0 +1,31 @@
+
+/* LAYOUT */
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    width: fit-content;
+    height: fit-content;
+    padding: 15px;
+    transition: transform 3 3 ease-in-out;
+    background-color: var(--red);
+    color: white;
+    border-radius: 15px;
+    border-color: var(--yellow);
+    border-width: 3px;
+    box-shadow: 5px 5px 5px rgb(1, 40, 83);
+}
+
+button:hover {
+    cursor: pointer;
+    transform: scale3d(1.2, 1.2, 1.2);
+}

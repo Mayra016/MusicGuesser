@@ -1,0 +1,44 @@
+
+    <main>
+        <div style="text-align:left;">
+            <button class="menu-btn" routerLink="/menu" >{{ menuTxt }}</button>
+        </div>
+        <div class="game-title">
+            <h1>MUSIC GUESSER</h1>
+        </div>
+        <div class="menu">
+            <div class="quality-div">
+                <div class="secondary-font">
+                    <p class="quality"> {{ quality }}</p>
+                </div>
+                <div class="options">
+                    <button style="font-size:30px; padding: 5px 10px;" (click)="changeQuality(-1)">◁</button>
+                    <p class="secondary-font" id="current-quality">{{ qualities[index] }}</p>
+                    <button style="font-size:30px; padding: 5px 10px;" (click)="changeQuality(1)">▷</button>
+                </div>
+            </div>
+            <div class="language-div">   
+                <div class="secondary-font">
+                    <p class="lang"> {{ languageTxt }} </p>
+                </div>
+                <div class="options">
+                    <button style="font-size:30px; padding: 5px 10px;" (click)="changeLanguage(-1)">◁</button>
+                    <p class="secondary-font" id="current-language">{{ languages[langIndex] }}</p>
+                    <button style="font-size:30px; padding: 5px 10px;" (click)="changeLanguage(1)">▷</button>
+                </div>
+            </div>
+            <div class="volume-container">
+                <div class="secondary-font">
+                    <p class="volume"> {{ volumeTxt }} </p>
+                </div>
+                <div id="config" class="secondary-font">
+                    <input name="volume-slider" [(ngModel)]="volume" (ngModelChange)="onVolumeChange(volume)" type="range" step="1" value="50" min="0" max="100" /><output> {{ volume }}</output>
+                </div>
+            </div>
+            <audio id="audio" [(ngModel)]="audio" src="assets/musics/Edward Smith - Study Vibes (Vlog No Copyright Music) - Background Music for Studying (FREE MUSIC).mp3" autoplay loop th:volume="0.5">
+              Your browser does not support the <code>audio</code> element.
+            </audio>
+
+        </div>
+        
+    </main>

@@ -1,0 +1,40 @@
+
+.options, .volume-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.quality-div, .language-div {
+    display: flex;
+    gap: 20px;
+}
+
+#config {
+    display: flex;
+    gap: 10px;
+}
+
+.menu {
+    background-color: var(--yellow);
+    padding: 25px;
+    border-radius: 15px;
+    width: 500px;
+    height: fit-content;
+}
+
+input {
+    cursor: pointer;
+}
+
+.volume-container {
+    margin-bottom: 30px;
+}
+
+.menu-btn {
+    margin-top: 50px;
+    margin-left: 20%;
+    font-weight: bold;
+    font-size: 20px;
+}

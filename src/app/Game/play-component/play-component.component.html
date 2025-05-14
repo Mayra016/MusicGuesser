@@ -1,0 +1,14 @@
+<div class="container">
+    <div>
+        <h1>{{ titleTxt }}</h1>
+        <h2>{{ letters }}</h2>
+    </div>
+    <div>
+        <div>
+            <label>{{wordTxt}}</label>
+            <input type="text" [(ngModel)]="userWord">
+        </div>
+        <input type="text" name="music" [(ngModel)]="music" (ngModelChange)="autocomplete(music)">
+        <button>{{ sendTxt }}</button>
+    </div>
+</div>

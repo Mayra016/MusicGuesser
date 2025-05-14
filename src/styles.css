@@ -1,1 +1,74 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --red : rgb(243, 70, 70);
+    --blue : rgb(0, 113, 234);
+    --yellow :rgb(243, 185, 70);
+}
+.game-title {
+    font-family: 'Arial';
+    font-size: 60px;
+}
+
+.title {
+    font-family: 'Ubuntu';
+    font-size: 40px;
+}
+
+.text {
+    font-family: 'Ubuntu';
+    font-size: 30px;
+}
+
+.secondary-font {
+    font-family: 'Ubuntu';
+    font-size: 30px;
+    font-weight: 800;
+}
+
+
+/* LAYOUT */
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: var(--blue);
+    margin: auto;
+    text-align: center;
+    text-align: center;
+}
+
+
+main {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin: auto;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    width: fit-content;
+    height: fit-content;
+    padding: 15px;
+    transition: transform 3 3 ease-in-out;
+    background-color: var(--red);
+    color: white;
+    border-radius: 15px;
+    border-color: var(--yellow);
+    border-width: 3px;
+    box-shadow: 5px 5px 5px rgb(1, 40, 83);
+}
+
+button:hover {
+    cursor: pointer;
+    transform: scale3d(1.2, 1.2, 1.2);
+}
