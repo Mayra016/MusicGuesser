@@ -73,11 +73,23 @@ export class PlayComponentComponent {
       this.titleTxt = textDE.gameTitle;
       this.wordTxt = textDE.wordTxt;
       this.sendTxt = textDE.send;
+      this.scoreTxt = textDE.score;
+      this.winTxt = textDE.win;
+      this.nextTxt = textDE.next;
+      this.lostTxt = textDE.lostTitle;
+      this.lostScore = textDE.scoreText;
+      this.playAgainTxt = textDE.playAgain;
 
     } else if (this.language == 'PT' || this.language == 'Portuguese') {
       this.titleTxt = textPT.gameTitle;
       this.wordTxt = textPT.wordTxt;
       this.sendTxt = textPT.send;
+      this.scoreTxt = textPT.score;
+      this.winTxt = textPT.win;
+      this.nextTxt = textPT.next;
+      this.lostTxt = textPT.lostTitle;
+      this.lostScore = textPT.scoreText;
+      this.playAgainTxt = textPT.playAgain;
     } else {
 
     }

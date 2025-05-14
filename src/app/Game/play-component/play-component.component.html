@@ -1,6 +1,6 @@
 <div class="container">
-    <div>
-        <p>{{scoreTxt}} {{score}}</p>
+    <div class="header">
+        <p class="score">{{scoreTxt}} {{score}}</p>
         <div class="lifes" *ngFor="let _ of Array(lifes).fill(0)" >
             <img class="life" src="/imgs/lifes.png" alt="heart-image">
         </div>
@@ -10,8 +10,8 @@
         <h1>{{ titleTxt }}</h1>
         <h2>{{ letters }}</h2>
     </div>
-    <div>
-        <div>
+    <div class="game">
+        <div class="word-input">
             <label>{{wordTxt}}</label>
             <input type="text" [(ngModel)]="userWord">
         </div>
@@ -23,12 +23,12 @@
         </ul>
         <button (click)="checkUserInput()">{{ sendTxt }}</button>
     </div>
-    <div *ngIf="won">
+    <div class="end-screen win-screen" *ngIf="won">
         <h1>{{winTxt}}</h1>
         <button (click)="nextLevel()">{{nextTxt}}</button>
 
     </div>
-    <div *ngIf="lost">
+    <div class="end-screen lost-screen" *ngIf="lost">
         <h1>{{lostTxt}}</h1>
         <p>{{lostScore}} {{score}}</p>
         <button (click)="playAgain()">{{playAgainTxt}}</button>
