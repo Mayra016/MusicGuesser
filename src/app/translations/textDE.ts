@@ -16,7 +16,10 @@ const textDE = {
 	level: 'Level ',
 	gameTitle: 'Gib eine Musik ein, die mindest ein Wort mit diesen Buchstaben enthalten:',
 	send: 'Senden',
-	wordTxt: 'Schreibe das Wort'
+	wordTxt: 'Schreibe das Wort',
+	win: 'Richtige Antwort!',
+	next: 'Nächstes Niveau',
+	score: 'Punkte:'
 };
 
 export default textDE;

@@ -16,7 +16,10 @@ const textEN = {
 	level: 'Level ',
 	gameTitle: 'Insert a music that contains a word with the following letters:',
 	send: 'Send',
-	wordTxt: 'Write the word'
+	wordTxt: 'Write the word',
+	win: 'Correct answer!',
+	next: 'Next level',
+	score: 'Score:'
 };
 
 export default textEN;

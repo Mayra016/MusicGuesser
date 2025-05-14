@@ -16,7 +16,10 @@ const textPT = {
 	level: 'Nível ',
 	gameTitle: 'Insira uma música que contenha uma palavra com as seguintes letras:',
 	send: 'Enviar',
-	wordTxt: 'Escreva a palavra'
+	wordTxt: 'Escreva a palavra',
+	win: 'Resposta correta!',
+	next: 'Próximo nível',
+	score: 'Pontuação:'
 }
 
 export default textPT;
