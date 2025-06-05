@@ -8,19 +8,33 @@ import textES from '../../translations/textES';
 import textPT from '../../translations/textPT';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { trigger, transition, style, animate } from '@angular/animations';
 
 
 @Component({
   selector: 'app-play-component',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterOutlet, RouterLink],
+  imports: [BrowserModule, FormsModule, CommonModule, RouterOutlet, RouterLink],
   templateUrl: './play-component.component.html',
-  styleUrls: ['./play-component.component.css']
+  styleUrls: ['./play-component.component.css'],
+  animations: [
+    trigger('fadeInOut', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'scale(0.9)' }),
+        animate('0.5s ease-out', style({ opacity: 1, transform: 'scale(1)' }))
+      ]),
+      transition(':leave', [
+        animate('0.3s ease-in', style({ opacity: 0, transform: 'scale(0.9)' }))
+      ])
+    ])
+  ]
 })
 export class PlayComponentComponent {
   constructor(private cookies:CookieService, private route:ActivatedRoute, private httpClient:HttpClient){
-    this.translate;
-    this.generateLetters;
+    this.translate();
+    this.generateLetters();
   }
   // local variables
   language: string = 'EN';
@@ -29,7 +43,7 @@ export class PlayComponentComponent {
   userWord: string = "";
   music: string = "";
   lyrics: string = "";
-  autocompleteApiURL: string = "api.genius.com/search?q=";
+  autocompleteApiURL: string = "/genius-api/search?q=";
   lyricsApiUrl: string = "https://api.lyrics.ovh/v1";
   autocompleteResult = {};
   songs: string[] = [];
@@ -50,6 +64,7 @@ export class PlayComponentComponent {
   lostTxt: string = textEN.lostTitle;
   lostScore: string = textEN.scoreText;
   playAgainTxt: string = textEN.playAgain;
+  songTxt: string = textEN.songTxt;
   
 
   ngOnInit(): void {
@@ -102,32 +117,75 @@ export class PlayComponentComponent {
   }
 
   selectedSong(selectedSong:string) {
-    this.music = selectedSong;
-    let userInput = selectedSong.split(" by ");
-    // fetch lyrics api
-    this.lyrics = String(this.httpClient.get(this.lyricsApiUrl + "/" + selectedSong[1] + "/" + selectedSong[0]));
+    let link = this.generateLinkToLyricsAPI(selectedSong);
+    this.getLyrics(link);
+  }
+
+  generateLinkToLyricsAPI(answer:string) {
+    this.music = answer;
+    answer = answer.replace(/\s+/g, " ").trim();
+    let lastByIndex = answer.lastIndexOf(" by ");
+    let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
+    let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
+    console.log("MÚSICA 0 " + artist);
+    console.log("MÚSICA 1 " + song);
+    console.log("LINK " + `${this.lyricsApiUrl}/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`);
+    
+    return `${this.lyricsApiUrl}/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`;
+  }
+
+  // fetch lyrics api
+  getLyrics(link:string) {
+    this.httpClient.get(link).subscribe({
+      next: (response: any) => {
+        this.lyrics = response.lyrics;
+        console.log("HOLAAA" + this.lyrics);
+      },
+      error: (err) =>  alert("Song not found!")
+    });
   }
 
   autocomplete(music: string) {
-    // fetch autocomplete Genius Api
-    const headers: HttpHeaders = new HttpHeaders();
-    headers.set("Authorization:", "Bearer -riMsB6htPjCj--rQmpY4EyFTwRViRwcOgmnaBhUfOENWwrZVbBGP5sFB1RH6xcE");
-    headers.set('Content-Type', 'application/json');
-    headers.set('Accept', 'application/json');
-    this.httpClient.get<any>(this.autocompleteApiURL + music, { headers }).subscribe({
-      next: (response) => {
-        this.songs = response?.response?.hits?.result?.map(
-          (item: any) => item.full_title
-        ) || [];
-        
-      },
-      error: (err) => console.error('Error:', err)
-    });
+    if (!music || music.trim() === '') {
+      this.songs = [];
+      return;
+    }
+  
+    this.httpClient.get<any>(`${this.autocompleteApiURL}${encodeURIComponent(music)}`)
+      .subscribe({
+        next: (response) => {
+          console.log('API Response:', response["response"]["hits"][0]); // Debug log
+          this.songs = response?.response?.hits?.map(
+            (item: any) =>  {
+              let song = item.result.title + " by " + item.result.artist_names;
+                if (song.endsWith(" by Najwa")) {
+                  song = song.replace("Najwa", "Najwa Nimri");
+                }
+                return song;
+            } 
+          ) || [];
+        },
+        error: (err) => {
+          console.error('API Error:', err);
+          this.songs = [];
+        }
+      });
   }
 
   checkUserInput() {
     this.userWord = this.userWord.toUpperCase();
-
+    this.lyrics = this.lyrics.toUpperCase();
+    console.log("SCORE ANTES" + this.score);
+    if (this.lyrics == "") {
+      let link = this.generateLinkToLyricsAPI(this.music);
+      this.getLyrics(link);
+    }
+    if (!this.userWord.includes(this.letters.charAt(0)) || !this.userWord.includes(this.letters.charAt(1))) {
+      alert("The word doesn't contain the letters");
+    }
+    if (!this.lyrics.includes(this.userWord)) {
+      alert("The lyrics doesn't contain the word");
+    }
     if (this.userWord.includes(this.letters.charAt(0)) &&
        this.userWord.includes(this.letters.charAt(1)) &&
        this.lyrics.includes(this.userWord)) {
@@ -140,17 +198,17 @@ export class PlayComponentComponent {
         this.score = 0;    
       }   
     }
-
+    console.log("SCORE ANTES" + this.score);
   }
 
   nextLevel() {
-    this.resetLevel;
     this.won = false;
+    this.resetLevel();
   }
 
   playAgain() {
-    this.resetLevel;
     this.lost = false;
+    this.resetLevel();
     this.score = 0;
     this.lifes = 3
   }
@@ -159,8 +217,9 @@ export class PlayComponentComponent {
     this.userWord = "";
     this.music = "";
     this.lyrics = "";
+    this.letters = "";
     this.songs = [];
     this.autocompleteResult = {};
-    this.generateLetters;
+    this.generateLetters();
   }
 }

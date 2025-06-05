@@ -1,0 +1,118 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px;
+}
+
+.lifes-imgs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.score, .letters-level {
+	display: flex;
+	flex-direction: row;
+	gap: 5px;
+	background-color: white;
+	border: none;
+	border-radius: 10px;
+	width: auto;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    font-weight: bold;
+    width: fit-content
+} 
+
+.game, .end-screen {
+    display: flex;
+	flex-direction: column;
+	gap: 5px;
+	background-color: white;
+	border: 10px;
+    border-color: var(--red);
+	border-radius: 10px;
+	width: auto;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    padding: 30px;   
+    margin: auto;
+    z-index: 2;
+    max-width: 500px;
+    margin-top: 50px;
+}
+
+.word-input {
+    display: flex;
+	flex-direction: row;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+input {
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.letters-level {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.send-btn {
+    display: flex;
+    margin: auto;
+}
+
+.text {
+    color: white;
+    font-weight: bolder;
+    margin: 5px;
+    -webkit-text-stroke: 2px black;
+}
+
+.end-screen {
+    margin-top: -400px;
+    z-index: 200;
+    background-color: var(--blue);
+    color: white;
+    position: relative; 
+    border: 5px;
+    border-color: var(--yellow);
+    border-style: solid;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+.win-screen {
+    border-color: rgb(168, 255, 157);
+}
+
+.life {
+    width: 40px;
+    height: auto;
+}
+
+.life {
+    width: 40px;
+    height: auto;
+    transition: transform 1s ease, filter 0.5s ease;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.life:hover {
+    transform: rotateY(180deg);
+}
+
