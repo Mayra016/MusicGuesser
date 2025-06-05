@@ -6,6 +6,11 @@
 .game-title {
     font-family: 'Ubuntu';
     font-size: 60px;
+ 
+}
+
+.game-title h1 {
+    -webkit-text-stroke: 5px white;  
 }
 
 .title {

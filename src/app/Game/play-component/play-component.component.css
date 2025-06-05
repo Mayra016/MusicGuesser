@@ -12,6 +12,10 @@
     justify-content: space-between;
 }
 
+.score {
+    font-size: 30px;
+}
+
 .score, .letters-level {
 	display: flex;
 	flex-direction: row;
@@ -23,8 +27,14 @@
 	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     padding: 10px;
     font-weight: bold;
-    width: fit-content
+    width: fit-content;
+    font-family: 'Ubuntu';
 } 
+
+.letters-level {
+    font-size: 40px;
+    
+}
 
 .game, .end-screen {
     display: flex;
@@ -55,6 +65,7 @@
 input {
     border-radius: 15px;
     padding: 10px;
+    font-size: 20px;
 }
 
 .letters-level {
@@ -67,13 +78,14 @@ input {
 .send-btn {
     display: flex;
     margin: auto;
+    font-size: 20px;
 }
 
 .text {
     color: white;
     font-weight: bolder;
     margin: 5px;
-    -webkit-text-stroke: 2px black;
+    -webkit-text-stroke: 2px black;   
 }
 
 .end-screen {
@@ -101,12 +113,7 @@ li {
 }
 
 .life {
-    width: 40px;
-    height: auto;
-}
-
-.life {
-    width: 40px;
+    width: 50px;
     height: auto;
     transition: transform 1s ease, filter 0.5s ease;
     transform-style: preserve-3d;
@@ -118,7 +125,7 @@ li {
 }
 
 label {
-    font-size: 18px;
+    font-size: 20px;
     font-family: 'Ubuntu';
 }
 
