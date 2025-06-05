@@ -1,36 +1,44 @@
+<script src="https://genius.codes"></script>
 <div class="container">
     <div class="header">
         <p class="score">{{scoreTxt}} {{score}}</p>
-        <div class="lifes" *ngFor="let _ of Array(lifes).fill(0)" >
-            <img class="life" src="/imgs/lifes.png" alt="heart-image">
+        <div class="lifes-imgs">
+            <div class="lifes" *ngFor="let _ of Array(lifes).fill(0)" >
+                <img class="life" src="assets/heart.png" alt="heart-image">
+            </div>
         </div>
+
         
     </div>
-    <div>
-        <h1>{{ titleTxt }}</h1>
-        <h2>{{ letters }}</h2>
+    <div class="instruction">
+        <h1 class="text">{{ titleTxt }}</h1>
+        <h2 class="letters-level">{{ letters }}</h2>
     </div>
     <div class="game">
         <div class="word-input">
             <label>{{wordTxt}}</label>
-            <input type="text" [(ngModel)]="userWord">
+            <input type="text" [(ngModel)]="userWord" autocomplete="off">
         </div>
-        <input type="text" name="music" [(ngModel)]="music" (ngModelChange)="autocomplete(music)">
+        <div class="word-input">
+            <label>{{songTxt}}</label>
+            <input type="text" name="music" [(ngModel)]="music" (input)="autocomplete(music)" placeholder="Song by artist" autocomplete="off" >
+        </div>
+
         <ul>
             <li *ngFor="let result of songs">
               <span (click)="selectedSong(result)">{{ result }}</span>
             </li>
         </ul>
-        <button (click)="checkUserInput()">{{ sendTxt }}</button>
+        <button class="send-btn" (click)="checkUserInput()">{{ sendTxt }}</button>
     </div>
-    <div class="end-screen win-screen" *ngIf="won">
-        <h1>{{winTxt}}</h1>
-        <button (click)="nextLevel()">{{nextTxt}}</button>
+</div>
+<div class="end-screen win-screen" *ngIf="won" [@fadeInOut]>
+    <h1>{{winTxt}}</h1>
+    <button class="send-btn" (click)="nextLevel()">{{nextTxt}}</button>
 
-    </div>
-    <div class="end-screen lost-screen" *ngIf="lost">
-        <h1>{{lostTxt}}</h1>
-        <p>{{lostScore}} {{score}}</p>
-        <button (click)="playAgain()">{{playAgainTxt}}</button>
-    </div>
+</div>
+<div class="end-screen lost-screen" *ngIf="lost" [@fadeInOut]>
+    <h1>{{lostTxt}}</h1>
+    <p>{{lostScore}} {{score}}</p>
+    <button class="send-btn" (click)="playAgain()">{{playAgainTxt}}</button>
 </div>
