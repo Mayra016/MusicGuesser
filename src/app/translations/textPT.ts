@@ -19,7 +19,8 @@ const textPT = {
 	wordTxt: 'Escreva a palavra',
 	win: 'Resposta correta!',
 	next: 'Próximo nível',
-	score: 'Pontuação:'
+	score: 'Pontuação:',
+	songTxt: 'Música'
 }
 
 export default textPT;

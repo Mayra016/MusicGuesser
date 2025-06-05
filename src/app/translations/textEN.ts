@@ -19,7 +19,8 @@ const textEN = {
 	wordTxt: 'Write the word',
 	win: 'Correct answer!',
 	next: 'Next level',
-	score: 'Score:'
+	score: 'Score:',
+	songTxt: 'Song'
 };
 
 export default textEN;

@@ -19,7 +19,8 @@ const textDE = {
 	wordTxt: 'Schreibe das Wort',
 	win: 'Richtige Antwort!',
 	next: 'Nächstes Niveau',
-	score: 'Punkte:'
+	score: 'Punkte:',
+	songTxt: 'Musik'
 };
 
 export default textDE;

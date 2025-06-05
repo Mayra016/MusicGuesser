@@ -19,7 +19,8 @@ const textES = {
 	wordTxt: 'Escribe la palabra',
 	win: '¡Respuesta correcta!',
 	next: 'Próximo nivel',
-	score: 'Puntos:'
+	score: 'Puntos:',
+	songTxt: 'Música'
 };
 
 export default textES;
