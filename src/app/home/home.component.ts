@@ -1,8 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
 import {Router, Event, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { NgIf } from '@angular/common';
+import textEN from '../translations/textEN';
+import textES from '../translations/textES';
+import textDE from '../translations/textDE';
+import textPT from '../translations/textPT';
 
 @Component({
   selector: 'app-home',
@@ -13,8 +18,12 @@ import { NgIf } from '@angular/common';
 export class HomeComponent {
   title = 'MusicGuesser';
   showMenu = true;
+  language :string = "EN";
+  playTxt :string = textEN.playTxt;
+  infoTxt :string = textEN.infoTxt;
+  configTxt :string = textEN.configTxt;
 
-  constructor(private router:Router) {
+  constructor(private cookies:CookieService, private route:ActivatedRoute, private router:Router) {
     this.router.events
       .pipe(
         filter((event: Event): event is NavigationStart => event instanceof NavigationStart)
@@ -24,5 +33,29 @@ export class HomeComponent {
       });
       console.log("show menu", this.showMenu);
   } 
+
+
+  ngOnInit(): void {
+    this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+    this.translate();
+  }
+
+  translate() {
+    if (this.language == "ES" || this.language == "Spanish") {
+      this.playTxt = textES.playTxt;
+      this.infoTxt = textES.infoTxt;
+      this.configTxt = textES.configTxt;
+    }
+    if (this.language == "DE" || this.language == "German") {
+      this.playTxt = textDE.playTxt;
+      this.infoTxt = textDE.infoTxt;
+      this.configTxt = textDE.configTxt;
+    }
+    if (this.language == "PT" || this.language == "Portuguese") {
+      this.playTxt = textPT.playTxt;
+      this.infoTxt = textPT.infoTxt;
+      this.configTxt = textPT.configTxt;
+    }
+  }
 
 }

@@ -20,7 +20,10 @@ const textEN = {
 	win: 'Correct answer!',
 	next: 'Next level',
 	score: 'Score:',
-	songTxt: 'Song: '
+	songTxt: 'Song: ',
+	playTxt: 'Play',
+	infoTxt: 'Information',
+	configTxt: 'Configuration'
 };
 
 export default textEN;

@@ -20,7 +20,10 @@ const textPT = {
 	win: 'Resposta correta!',
 	next: 'Próximo nível',
 	score: 'Pontuação:',
-	songTxt: 'Música: '
+	songTxt: 'Música: ',
+	playTxt: 'Jogar',
+	infoTxt: 'Informação',
+	configTxt: 'Configuração'
 }
 
 export default textPT;
