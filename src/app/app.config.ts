@@ -5,6 +5,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { CookieService } from 'ngx-cookie-service';
 import { provideHttpClient } from '@angular/common/http';
 
+
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration(withEventReplay()), CookieService, provideHttpClient()]
 };

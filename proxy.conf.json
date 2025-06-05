@@ -1,0 +1,13 @@
+{
+    "/genius-api": {
+      "target": "https://api.genius.com",
+      "secure": true,
+      "changeOrigin": true,
+      "pathRewrite": {
+        "^/genius-api": ""
+      },
+      "headers": {
+        "Authorization": "Bearer -riMsB6htPjCj--rQmpY4EyFTwRViRwcOgmnaBhUfOENWwrZVbBGP5sFB1RH6xcE"
+      }
+    }
+}
