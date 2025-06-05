@@ -61,6 +61,7 @@ input {
     display: flex;
     flex-direction: column;
     margin: auto;
+    margin-top: 10px;
 }
 
 .send-btn {
@@ -114,5 +115,10 @@ li {
 
 .life:hover {
     transform: rotateY(180deg);
+}
+
+label {
+    font-size: 18px;
+    font-family: 'Ubuntu';
 }
 
