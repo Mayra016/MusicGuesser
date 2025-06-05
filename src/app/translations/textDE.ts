@@ -20,7 +20,7 @@ const textDE = {
 	win: 'Richtige Antwort!',
 	next: 'Nächstes Niveau',
 	score: 'Punkte:',
-	songTxt: 'Musik'
+	songTxt: 'Musik:'
 };
 
 export default textDE;

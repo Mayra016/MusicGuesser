@@ -8,15 +8,13 @@ import textES from '../../translations/textES';
 import textPT from '../../translations/textPT';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { trigger, transition, style, animate } from '@angular/animations';
 
 
 @Component({
   selector: 'app-play-component',
   standalone: true,
-  imports: [BrowserModule, FormsModule, CommonModule, RouterOutlet, RouterLink],
+  imports: [FormsModule, CommonModule, RouterOutlet, RouterLink],
   templateUrl: './play-component.component.html',
   styleUrls: ['./play-component.component.css'],
   animations: [
@@ -26,10 +24,11 @@ import { trigger, transition, style, animate } from '@angular/animations';
         animate('0.5s ease-out', style({ opacity: 1, transform: 'scale(1)' }))
       ]),
       transition(':leave', [
-        animate('0.3s ease-in', style({ opacity: 0, transform: 'scale(0.9)' }))
+        animate('0.5s ease-in', style({ opacity: 0, transform: 'scale(0.9)' }))
       ])
     ])
   ]
+
 })
 export class PlayComponentComponent {
   constructor(private cookies:CookieService, private route:ActivatedRoute, private httpClient:HttpClient){
@@ -69,6 +68,7 @@ export class PlayComponentComponent {
 
   ngOnInit(): void {
     this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+    this.translate();
   }
 
 
@@ -83,6 +83,7 @@ export class PlayComponentComponent {
       this.lostTxt = textES.lostTitle;
       this.lostScore = textES.scoreText;
       this.playAgainTxt = textES.playAgain;
+      this.songTxt = textES.songTxt;
 
     } else if (this.language == 'DE' || this.language == 'German') {
       this.titleTxt = textDE.gameTitle;
@@ -94,6 +95,7 @@ export class PlayComponentComponent {
       this.lostTxt = textDE.lostTitle;
       this.lostScore = textDE.scoreText;
       this.playAgainTxt = textDE.playAgain;
+      this.songTxt = textES.songTxt;
 
     } else if (this.language == 'PT' || this.language == 'Portuguese') {
       this.titleTxt = textPT.gameTitle;
@@ -105,6 +107,7 @@ export class PlayComponentComponent {
       this.lostTxt = textPT.lostTitle;
       this.lostScore = textPT.scoreText;
       this.playAgainTxt = textPT.playAgain;
+      this.songTxt = textES.songTxt;
     } else {
 
     }
@@ -112,7 +115,7 @@ export class PlayComponentComponent {
 
   // generate letters
   generateLetters() {
-    this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length) + 1));
+    this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
     this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length - 4) + 1));
   }
 

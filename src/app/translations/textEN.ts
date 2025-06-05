@@ -20,7 +20,7 @@ const textEN = {
 	win: 'Correct answer!',
 	next: 'Next level',
 	score: 'Score:',
-	songTxt: 'Song'
+	songTxt: 'Song: '
 };
 
 export default textEN;

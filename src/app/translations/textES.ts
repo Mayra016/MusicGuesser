@@ -20,7 +20,7 @@ const textES = {
 	win: '¡Respuesta correcta!',
 	next: 'Próximo nivel',
 	score: 'Puntos:',
-	songTxt: 'Música'
+	songTxt: 'Música: '
 };
 
 export default textES;
