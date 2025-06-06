@@ -23,7 +23,8 @@ const textPT = {
 	songTxt: 'Música: ',
 	playTxt: 'Jogar',
 	infoTxt: 'Informação',
-	configTxt: 'Configuração'
+	configTxt: 'Configuração',
+	surrenderTxt: 'Render-se'
 }
 
 export default textPT;

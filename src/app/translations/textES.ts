@@ -16,14 +16,15 @@ const textES = {
 	level: 'Nível ',
 	gameTitle: 'Inserta una canción que contenga alguna palabra con estas letras:',
 	send: 'Enviar',
-	wordTxt: 'Escribe la palabra',
+	wordTxt: 'Escribe la palabra:',
 	win: '¡Respuesta correcta!',
 	next: 'Próximo nivel',
 	score: 'Puntos:',
 	songTxt: 'Música: ',
 	playTxt: 'Jugar',
 	infoTxt: 'Información',
-	configTxt: 'Configuración'
+	configTxt: 'Configuración',
+	surrenderTxt: 'Rendirse'
 };
 
 export default textES;

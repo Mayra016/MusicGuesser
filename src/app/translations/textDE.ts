@@ -23,7 +23,8 @@ const textDE = {
 	songTxt: 'Musik:',
 	playTxt: 'Spielen',
 	infoTxt: 'Information',
-	configTxt: 'Einstellungen'
+	configTxt: 'Einstellungen',
+	surrenderTxt: 'Aufgeben'
 };
 
 export default textDE;

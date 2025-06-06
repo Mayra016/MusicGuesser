@@ -23,7 +23,8 @@ const textEN = {
 	songTxt: 'Song: ',
 	playTxt: 'Play',
 	infoTxt: 'Information',
-	configTxt: 'Configuration'
+	configTxt: 'Configuration',
+	surrenderTxt: 'Surrender'
 };
 
 export default textEN;
