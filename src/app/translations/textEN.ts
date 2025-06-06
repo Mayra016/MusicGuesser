@@ -24,7 +24,8 @@ const textEN = {
 	playTxt: 'Play',
 	infoTxt: 'Information',
 	configTxt: 'Configuration',
-	surrenderTxt: 'Surrender'
+	surrenderTxt: 'Surrender',
+  	YTLINK: 'https://www.youtube.com/@peculiaritiesoftheworld'
 };
 
 export default textEN;

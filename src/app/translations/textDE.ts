@@ -24,7 +24,8 @@ const textDE = {
 	playTxt: 'Spielen',
 	infoTxt: 'Information',
 	configTxt: 'Einstellungen',
-	surrenderTxt: 'Aufgeben'
+	surrenderTxt: 'Aufgeben',
+	YTLINK: 'https://www.youtube.com/@besonderheitenderwelt'
 };
 
 export default textDE;
