@@ -46,3 +46,7 @@
     <p>{{lostScore}} {{score}}</p>
     <button class="send-btn" (click)="playAgain()">{{playAgainTxt}}</button>
 </div>
+
+<iframe *ngIf="musicVideo" [src]="musicVideoSrc" width="auto" frameborder="0">
+
+</iframe>
