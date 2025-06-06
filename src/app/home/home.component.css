@@ -29,3 +29,10 @@ button:hover {
     cursor: pointer;
     transform: scale3d(1.2, 1.2, 1.2);
 }
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 70px;
+        -webkit-text-stroke: 3px white;   
+    }
+}
