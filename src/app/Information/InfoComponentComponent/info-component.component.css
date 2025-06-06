@@ -1,0 +1,81 @@
+
+/* LAYOUT */
+
+main {
+    display: flex;
+    font-family: 'Ubuntu';
+
+}
+.infos {
+    justify-items: center;
+}
+
+.menu {
+    background-color: var(--red);
+    padding: 10px;
+    text-align: center;
+    justify-items: center;   
+    border-radius: 15px;
+    width: 100px;
+    height: 60px;
+    font-size: 25px;
+    margin-top: 30px;
+}
+
+.youtube-logo {
+    width: 40px;
+    height: 40px;
+}
+
+.ornitorrinco {
+    width: 300px;
+    margin-left: 70px;
+    transition: transform 6 ease-in-out;
+    margin-top: 30px;
+}
+
+.ornitorrinco:hover{
+    transform:translateY(-40px);
+}
+
+a {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 50px;
+    text-decoration: none;
+    padding: 15px;
+    transition: transform 3 3 ease-in-out;
+    background-color: var(--yellow);
+    color: white;
+    border-radius: 15px;
+    border-color: var(--red);
+    border-width: 3px;
+    box-shadow: 5px 5px 5px rgb(1, 40, 83);
+}
+
+a:hover {
+    cursor: pointer;
+    transform: scale3d(1.2, 1.2, 1.2);
+}
+
+h1 {
+    font-size: 90px;
+    -webkit-text-stroke: 3px white;   
+    font-family: 'Ubuntu';
+}
+
+p{
+    font-family: 'Ubuntu';
+    color: var(--red);
+    font-size: 30px;
+    font-weight: bold;
+    -webkit-text-stroke: 1px white;  
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 70px;
+        -webkit-text-stroke: 3px white;   
+    }
+}
