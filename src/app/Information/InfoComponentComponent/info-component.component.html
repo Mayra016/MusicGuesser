@@ -1,1 +1,36 @@
-<p>info-component works!</p>
+<main>
+    <div class="page-background">
+        <div class="container">
+            <div class="header-bar">
+                <button class="menu" routerLink="/">
+                    <h5 >{{menuTxt}}</h5>
+                </button>
+            </div>
+            
+            <div clas="tittle">
+                <h1>MUSIC GUESSER</h1>
+            </div>
+            
+    
+            
+            <div class="infos">
+                <div class="intro-text">
+                    <h2 th:text="#{INTRO}"></h2>
+                </div>
+                <a class="youtube-infos" [href]="YTLINK"  target="_blank">
+                    <img class="youtube-logo" src="/assets/youtube-logo.png" alt="youtube-logo"/>
+                    <p>Youtube</p>
+                </a>
+            </div>	
+            <div>
+                <img class="ornitorrinco" src="/assets/ornitorrincoVF.png" alt="Logo ornitorrinco">
+            </div>
+            <audio id="audio" src="assets/menu-music.wav" autoplay loop [volume]="volume / 100">
+                Your browser does not support the <code>audio</code> element.
+              </audio>   		
+    
+        
+        </div>
+        
+    </div>
+</main>
