@@ -24,7 +24,8 @@ const textPT = {
 	playTxt: 'Jogar',
 	infoTxt: 'Informação',
 	configTxt: 'Configuração',
-	surrenderTxt: 'Render-se'
+	surrenderTxt: 'Render-se',
+	YTLINK: 'https://www.youtube.com/@peculiaridadesdomundo'
 }
 
 export default textPT;
