@@ -9,6 +9,7 @@ import textPT from '../../translations/textPT';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 
 @Component({
@@ -58,9 +59,11 @@ import { trigger, transition, style, animate, keyframes } from '@angular/animati
 
 })
 export class PlayComponentComponent {
-  constructor(private cookies:CookieService, private route:ActivatedRoute, private httpClient:HttpClient){
+  
+  constructor(private cookies:CookieService, private route:ActivatedRoute, private httpClient:HttpClient, private sanitizer: DomSanitizer){
     this.translate();
     this.generateLetters();
+    this.musicVideoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(''); 
   }
   // local variables
   language: string = 'EN';
@@ -80,6 +83,9 @@ export class PlayComponentComponent {
   minutes: string = "00";
   seconds: number = 60;
   animationState: string = 'none';
+  musicVideo: boolean = false;
+  musicVideoSrc!: SafeResourceUrl;
+  
   Array = Array;
 
 
@@ -101,6 +107,7 @@ export class PlayComponentComponent {
     this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
     this.translate();
     this.timer();
+    
   }
 
   async timer() {
@@ -250,6 +257,30 @@ export class PlayComponentComponent {
     }
   }
 
+  async searchVideo() {
+    console.log("SEARCHING VIDEO");
+    let answer = this.music;
+    answer = answer.replace(/\s+/g, " ").trim();
+    let lastByIndex = answer.lastIndexOf(" by ");
+    let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
+    let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
+    let songFormated = artist + song;
+    let apiKey = "AIzaSyBJnRvYAq8_-a5EfbVdHhMRCbBEBc2VatI";
+    console.log(songFormated);
+    let googleApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${songFormated}&key=${apiKey}`;
+    const response = await fetch(googleApiUrl);
+    const data = await response.json();
+
+    if (data.items.length > 0) {
+      const videoId = data.items[0].id.videoId;
+      if (this.sanitizer) {  // Add this check
+        this.musicVideoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=0`);
+        console.log(this.musicVideoSrc);
+        this.musicVideo = true;
+      }
+    }
+  }
+
   runChecks() {
     if (!this.userWord.includes(this.letters.charAt(0)) || !this.userWord.includes(this.letters.charAt(1))) {
       alert("The word doesn't contain the letters");
@@ -260,6 +291,7 @@ export class PlayComponentComponent {
     if (this.userWord.includes(this.letters.charAt(0)) &&
         this.userWord.includes(this.letters.charAt(1)) &&
         this.lyrics.includes(this.userWord)) {
+      this.searchVideo();
       this.won = true;
       this.score += 10;
       this.seconds = 60;
@@ -283,6 +315,7 @@ export class PlayComponentComponent {
     this.resetLevel();
     this.score = 0;
     this.lifes = 3;
+    this.musicVideo = false;
     this.timer();
   }
 
