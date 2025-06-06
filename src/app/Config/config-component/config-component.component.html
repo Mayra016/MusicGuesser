@@ -32,10 +32,10 @@
                     <p class="volume"> {{ volumeTxt }} </p>
                 </div>
                 <div id="config" class="secondary-font">
-                    <input name="volume-slider" [(ngModel)]="volume" (ngModelChange)="onVolumeChange(volume)" type="range" step="1" value="50" min="0" max="100" /><output> {{ volume }}</output>
+                    <input name="volume-slider" [(ngModel)]="volume" (ngModelChange)="onVolumeChange(volume)" type="range" step="1" value="50" min="0" max="100" /><output> {{ volume }}%</output>
                 </div>
             </div>
-            <audio id="audio" [(ngModel)]="audio" src="assets/musics/Edward Smith - Study Vibes (Vlog No Copyright Music) - Background Music for Studying (FREE MUSIC).mp3" autoplay loop th:volume="0.5">
+            <audio id="audio" src="assets/menu-music.wav" autoplay loop [volume]="volume / 100">
               Your browser does not support the <code>audio</code> element.
             </audio>
 

@@ -4,5 +4,8 @@
       <button id="play" class="secondary-font" routerLink="/play">{{playTxt}}</button>
       <button id="info" class="secondary-font" routerLink="/info">{{infoTxt}}</button>
       <button id="config" class="secondary-font" routerLink="/config">{{configTxt}}</button>
-    </div>      
+    </div> 
+    <audio id="audio" src="assets/menu-music.wav" autoplay loop [volume]="volume / 100">
+      Your browser does not support the <code>audio</code> element.
+    </audio>   
 </div>

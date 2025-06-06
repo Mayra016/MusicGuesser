@@ -19,6 +19,8 @@ export class HomeComponent {
   title = 'MusicGuesser';
   showMenu = true;
   language :string = "EN";
+  volume: number = 50;
+
   playTxt :string = textEN.playTxt;
   infoTxt :string = textEN.infoTxt;
   configTxt :string = textEN.configTxt;
@@ -34,9 +36,13 @@ export class HomeComponent {
       console.log("show menu", this.showMenu);
   } 
 
+  ngAfterViewInit(): void {
+
+  }
 
   ngOnInit(): void {
     this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+    this.volume = Number(this.cookies.get("volume") || this.route.snapshot.paramMap.get('vol') || 50);
     this.translate();
   }
 

@@ -21,7 +21,7 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
     graphics: number = 1;
     volIn: HTMLInputElement | null = null;
     volOut: HTMLElement | null = null;
-    audio: HTMLAudioElement | null = null;
+
     quality: string = "Quality: ";
     langDiv: HTMLElement | null = null;
     qualities: string[] = [];
@@ -49,17 +49,11 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
-        this.audio = document.getElementById("audio") as HTMLAudioElement;
+        
         this.langDiv = document.getElementById("current-language");
         this.volIn = document.getElementById("vol-in") as HTMLInputElement;
         this.volOut = document.getElementById("vol-out");
 
-        if (this.volIn && this.volOut && this.audio) {
-            this.volIn.oninput = () => {
-                this.volOut!.innerText = this.volIn!.value + "%";
-                this.audio!.volume = Number(this.volIn!.value) / 100;
-            };
-        }
     }
 
     translate() {
@@ -129,6 +123,8 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
     }
 
     onVolumeChange(newVolume: number) {
+        this.volume = newVolume;
         this.cookies.set("volume", String(newVolume));
+ 
     }
 }
