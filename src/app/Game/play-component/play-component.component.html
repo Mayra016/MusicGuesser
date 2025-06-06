@@ -1,7 +1,11 @@
 <script src="https://genius.codes"></script>
 <div class="container">
+    <button id="play" class="secondary-font" routerLink="/">{{surrenderTxt}}</button>
     <div class="header">
         <p class="score">{{scoreTxt}} {{score}}</p>
+        <div class="timer" [@shakeAnimation]="animationState">
+            <p>{{minutes}} : {{seconds < 10 ? '0' + seconds : seconds}}</p>
+        </div>
         <div class="lifes-imgs">
             <div class="lifes" *ngFor="let _ of Array(lifes).fill(0)" >
                 <img class="life" src="assets/heart.png" alt="heart-image">

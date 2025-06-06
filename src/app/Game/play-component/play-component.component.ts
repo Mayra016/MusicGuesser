@@ -8,7 +8,7 @@ import textES from '../../translations/textES';
 import textPT from '../../translations/textPT';
 import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { trigger, transition, style, animate } from '@angular/animations';
+import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 
 
 @Component({
@@ -25,6 +25,33 @@ import { trigger, transition, style, animate } from '@angular/animations';
       ]),
       transition(':leave', [
         animate('0.5s ease-in', style({ opacity: 0, transform: 'scale(0.9)' }))
+      ])
+    ]),
+    trigger('shakeAnimation', [
+      transition('* => shake', [
+        animate('15s', keyframes([
+          style({ transform: 'translate(2px, 2px) rotate(0deg)', offset: 0 }),
+          style({ transform: 'translate(-2px, -2px) rotate(-1deg)', offset: 0.05 }),
+          style({ transform: 'translate(-4px, 0px) rotate(1deg)', offset: 0.1 }),
+          style({ transform: 'translate(4px, 2px) rotate(0deg)', offset: 0.15 }),
+          style({ transform: 'translate(2px, -2px) rotate(1deg)', offset: 0.2 }),
+          style({ transform: 'translate(-2px, 3px) rotate(-1deg)', offset: 0.25 }),
+          style({ transform: 'translate(-4px, 1px) rotate(0deg)', offset: 0.3 }),
+          style({ transform: 'translate(4px, 1px) rotate(-1deg)', offset: 0.35 }),
+          style({ transform: 'translate(-2px, -3px) rotate(1deg)', offset: 0.4 }),
+          style({ transform: 'translate(2px, 3px) rotate(0deg)', offset: 0.45 }),
+          style({ transform: 'translate(2px, -1px) rotate(-1deg)', offset: 0.5 }),
+          style({ transform: 'translate(-2px, 1px) rotate(1deg)', offset: 0.55 }),
+          style({ transform: 'translate(4px, -2px) rotate(0deg)', offset: 0.6 }),
+          style({ transform: 'translate(-4px, 2px) rotate(-1deg)', offset: 0.65 }),
+          style({ transform: 'translate(3px, 0px) rotate(1deg)', offset: 0.7 }),
+          style({ transform: 'translate(-3px, -2px) rotate(0deg)', offset: 0.75 }),
+          style({ transform: 'translate(3px, 1px) rotate(-1deg)', offset: 0.8 }),
+          style({ transform: 'translate(-3px, 3px) rotate(1deg)', offset: 0.85 }),
+          style({ transform: 'translate(1px, -1px) rotate(0deg)', offset: 0.9 }),
+          style({ transform: 'translate(-1px, 2px) rotate(-1deg)', offset: 0.95 }),
+          style({ transform: 'translate(2px, -2px) rotate(0deg)', offset: 1 }),
+        ]))
       ])
     ])
   ]
@@ -50,6 +77,9 @@ export class PlayComponentComponent {
   lost: boolean = false;
   score: number = 0;
   lifes: number = 3;
+  minutes: string = "00";
+  seconds: number = 60;
+  animationState: string = 'none';
   Array = Array;
 
 
@@ -64,13 +94,38 @@ export class PlayComponentComponent {
   lostScore: string = textEN.scoreText;
   playAgainTxt: string = textEN.playAgain;
   songTxt: string = textEN.songTxt;
+  surrenderTxt: string = textEN.surrenderTxt;
   
 
   ngOnInit(): void {
     this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
     this.translate();
+    this.timer();
   }
 
+  async timer() {
+    while (this.seconds > 0) {
+      if (this.seconds <= 10) {
+        this.animationState = 'shake';
+      } else {
+        this.animationState = 'none';
+      }      
+      this.seconds--;
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+    if (this.lifes > 1) {
+      this.lifes--;
+      this.animationState = 'none';
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      this.seconds = 10;
+      this.timer();
+    } else {
+      this.lost = true;
+    }
+    
+    
+    
+  }
 
   translate() {
     if (this.language == 'ES' || this.language == 'Spanish') {
@@ -84,6 +139,7 @@ export class PlayComponentComponent {
       this.lostScore = textES.scoreText;
       this.playAgainTxt = textES.playAgain;
       this.songTxt = textES.songTxt;
+      this.surrenderTxt = textES.surrenderTxt;
 
     } else if (this.language == 'DE' || this.language == 'German') {
       this.titleTxt = textDE.gameTitle;
@@ -96,6 +152,7 @@ export class PlayComponentComponent {
       this.lostScore = textDE.scoreText;
       this.playAgainTxt = textDE.playAgain;
       this.songTxt = textES.songTxt;
+      this.surrenderTxt = textDE.surrenderTxt;
 
     } else if (this.language == 'PT' || this.language == 'Portuguese') {
       this.titleTxt = textPT.gameTitle;
@@ -108,6 +165,7 @@ export class PlayComponentComponent {
       this.lostScore = textPT.scoreText;
       this.playAgainTxt = textPT.playAgain;
       this.songTxt = textES.songTxt;
+      this.surrenderTxt = textPT.surrenderTxt;
     } else {
 
     }
@@ -116,7 +174,7 @@ export class PlayComponentComponent {
   // generate letters
   generateLetters() {
     this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
-    this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length - 4) + 1));
+    this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
   }
 
   selectedSong(selectedSong:string) {
@@ -138,13 +196,16 @@ export class PlayComponentComponent {
   }
 
   // fetch lyrics api
-  getLyrics(link:string) {
+  getLyrics(link:string, callback?: Function) {
     this.httpClient.get(link).subscribe({
       next: (response: any) => {
         this.lyrics = response.lyrics;
         console.log("HOLAAA" + this.lyrics);
       },
-      error: (err) =>  alert("Song not found!")
+      error: (err) =>  {
+        this.music = "";
+        alert("Song not found!");
+      }
     });
   }
 
@@ -176,13 +237,20 @@ export class PlayComponentComponent {
   }
 
   checkUserInput() {
-    this.userWord = this.userWord.toUpperCase();
+    this.userWord = this.userWord.split(" ")[0].toUpperCase();
     this.lyrics = this.lyrics.toUpperCase();
-    console.log("SCORE ANTES" + this.score);
+    console.log("SCORE ANTES" + this.userWord);
     if (this.lyrics == "") {
       let link = this.generateLinkToLyricsAPI(this.music);
-      this.getLyrics(link);
+      this.getLyrics(link, () => {
+        this.runChecks();
+      });
+    } else {
+      this.runChecks();
     }
+  }
+
+  runChecks() {
     if (!this.userWord.includes(this.letters.charAt(0)) || !this.userWord.includes(this.letters.charAt(1))) {
       alert("The word doesn't contain the letters");
     }
@@ -190,10 +258,11 @@ export class PlayComponentComponent {
       alert("The lyrics doesn't contain the word");
     }
     if (this.userWord.includes(this.letters.charAt(0)) &&
-       this.userWord.includes(this.letters.charAt(1)) &&
-       this.lyrics.includes(this.userWord)) {
+        this.userWord.includes(this.letters.charAt(1)) &&
+        this.lyrics.includes(this.userWord)) {
       this.won = true;
       this.score += 10;
+      this.seconds = 60;
     } else {
       this.lifes = this.lifes - 1;
       if (this.lifes == 0) {
@@ -201,7 +270,7 @@ export class PlayComponentComponent {
         this.score = 0;    
       }   
     }
-    console.log("SCORE ANTES" + this.score);
+    console.log("SCORE DESPUÉS" + this.score);
   }
 
   nextLevel() {
@@ -213,7 +282,8 @@ export class PlayComponentComponent {
     this.lost = false;
     this.resetLevel();
     this.score = 0;
-    this.lifes = 3
+    this.lifes = 3;
+    this.timer();
   }
 
   resetLevel() {
@@ -223,6 +293,7 @@ export class PlayComponentComponent {
     this.letters = "";
     this.songs = [];
     this.autocompleteResult = {};
+    this.seconds = 60;
     this.generateLetters();
   }
 }

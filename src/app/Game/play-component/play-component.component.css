@@ -2,8 +2,13 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin: auto;
     justify-content: space-between;
     margin: 30px;
+}
+
+h1, p {
+    font-family: 'Ubuntu';
 }
 
 .lifes-imgs {
@@ -12,7 +17,7 @@
     justify-content: space-between;
 }
 
-.score {
+.score, .timer {
     font-size: 30px;
 }
 
@@ -51,21 +56,24 @@
     z-index: 2;
     max-width: 500px;
     margin-top: 50px;
+    margin-bottom: 100px;
 }
 
 .word-input {
     display: flex;
 	flex-direction: row;
-    gap: 30px;
+
     justify-content: center;
     align-items: center;
     font-weight: bold;
+    justify-content: space-between;
 }
 
 input {
     border-radius: 15px;
     padding: 10px;
     font-size: 20px;
+    width: 55%;
 }
 
 .letters-level {
@@ -106,6 +114,7 @@ ul {
 
 li {
     margin-bottom: 10px;
+    font-size: 18px;
 }
 
 .win-screen {
@@ -129,3 +138,25 @@ label {
     font-family: 'Ubuntu';
 }
 
+.timer {
+    width: 150px;
+    background-color: white;
+	border: 10px;
+    border-color: var(--red);
+	border-radius: 10px;
+	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    font-weight: bolder;
+}
+
+#play {
+    margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+  }
+  
