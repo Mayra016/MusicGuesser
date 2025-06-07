@@ -33,12 +33,16 @@
             "scripts": [],
             "server": "src/main.server.ts",
             "outputMode": "server",
+            "prerender": {
+              "routesFile": "prerender-routes.txt"
+            },
             "ssr": {
               "entry": "src/server.ts"
             }
           },
           "configurations": {
             "production": {
+              "prerender": false,
               "budgets": [
                 {
                   "type": "initial",

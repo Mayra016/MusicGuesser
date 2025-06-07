@@ -1,0 +1,47 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist/out-tsc",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": false,
+    "useDefineForClassFields": false,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
+    "noImplicitAny": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "baseUrl": "./src",
+    "forceConsistentCasingInFileNames": true
+  },
+  "files": [
+    "src/main.server.ts"
+  ],
+"include": [
+    "src/**/*.ts",
+    "src/app/**/*.ts",
+    "src/app/app.component.ts",
+    "src/app/app.module.ts",
+    "src/app/app.config.ts",
+    "src/app/app.routes.server.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.test.ts"
+  ],
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true,
+  }
+}

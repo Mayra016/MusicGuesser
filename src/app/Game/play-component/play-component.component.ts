@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ActivatedRoute, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import textEN from '../../translations/textEN';
 import { CookieService } from 'ngx-cookie-service';
 import textDE from '../../translations/textDE';
@@ -10,12 +10,14 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment.prod';
+//import { geniusProxy } from '../../../../functions/src/genius-proxy';
 
 
 @Component({
   selector: 'app-play-component',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterOutlet, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './play-component.component.html',
   styleUrls: ['./play-component.component.css'],
   animations: [
