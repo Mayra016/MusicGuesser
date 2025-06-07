@@ -255,15 +255,14 @@ export class PlayComponentComponent {
       });
   }
 
-  checkUserInput() {
+  async checkUserInput() {
     this.userWord = this.userWord.split(" ")[0].toUpperCase();
     this.lyrics = this.lyrics.toUpperCase();
     console.log("SCORE ANTES" + this.userWord);
     if (this.lyrics == "") {
       let link = this.generateLinkToLyricsAPI(this.music);
-      this.getLyrics(link, () => {
-        this.runChecks();
-      });
+      await this.getLyrics(link);
+      this.runChecks();
     } else {
       this.runChecks();
     }
