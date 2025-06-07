@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, RouterLink} from '@angular/router';
+import { ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule } from '@angular/forms'; 
 import textES from '../../translations/textES';
@@ -33,19 +33,25 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
     saveTxt: string = "Save";
     menuTxt: string = "Menu";
 
-    constructor(private cookies:CookieService, private route:ActivatedRoute){}
+    constructor(private cookies:CookieService, private route:ActivatedRoute, private router: Router,){}
 
     ngOnInit(): void {
-        this.language = localStorage.getItem("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
-        this.volume = Number(localStorage.getItem("volume") || this.route.snapshot.paramMap.get('vol') || 50);
-        this.graphics = Number(localStorage.getItem("graphics") || this.route.snapshot.paramMap.get('graph') || 1);
-        this.index = Math.max(0, Math.min(2, this.graphics));
+        this.route.queryParamMap.subscribe(params => {
+            const langParam = params.get('lang');
+            const volParam = params.get('vol');
+        
+            this.language = langParam || localStorage.getItem("language") || 'EN';
+            this.volume = volParam ? Number(volParam) : Number(localStorage.getItem("volume") || 50);
+            this.graphics = Number(localStorage.getItem("graphics") || this.route.snapshot.paramMap.get('graph') || 1);
+            this.index = Math.max(0, Math.min(2, this.graphics));
+    
+            if (this.volume != 50) {
+                localStorage.setItem("volume", this.volume.toString());
+            }
+    
+            this.translate();
+        });
 
-        if (this.volume != 50) {
-            localStorage.setItem("volume", this.volume.toString());
-        }
-
-        this.translate();
     }
 
     ngAfterViewInit(): void {
@@ -119,12 +125,24 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
         }
         this.language = this.languages[this.langIndex];
         localStorage.setItem("language", this.language);
+        this.updateParams();
         this.translate();
     }
 
     onVolumeChange(newVolume: number) {
         this.volume = newVolume;
         localStorage.setItem("volume", String(newVolume));
+        this.updateParams();
  
+    }
+
+    updateParams() {
+        this.router.navigate([], {
+            queryParams: {
+              lang: this.language,
+              vol: this.volume
+            },
+            queryParamsHandling: 'merge', 
+          });
     }
 }
