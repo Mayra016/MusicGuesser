@@ -10,8 +10,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { environment } from '../../../environments/environment.prod';
-//import { geniusProxy } from '../../../../functions/src/genius-proxy';
 
 
 @Component({
