@@ -2,7 +2,7 @@
     <div class="page-background">
         <div class="container">
             <div class="header-bar">
-                <button class="menu" routerLink="/">
+                <button class="menu" routerLink="/" [queryParams]="{ lang: language, vol: volume }" queryParamsHandling="merge">
                     <h5 >{{menuTxt}}</h5>
                 </button>
             </div>
