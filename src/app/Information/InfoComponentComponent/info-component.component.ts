@@ -22,10 +22,17 @@ export class InfoComponentComponent {
   
 
   ngOnInit(): void {
-    this.language = localStorage.getItem("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
-    this.volume = Number(localStorage.getItem("volume") || this.route.snapshot.paramMap.get('vol') || 50);
-
-    this.translate();
+    this.route.queryParamMap.subscribe(params => {
+      const langParam = params.get('lang');
+      const volParam = params.get('vol');
+  
+      this.language = langParam || localStorage.getItem("language") || 'EN';
+      this.volume = volParam ? Number(volParam) : Number(localStorage.getItem("volume") || 50);
+  
+      localStorage.setItem("language", this.language);
+      localStorage.setItem("volume", this.volume.toString());
+      this.translate();
+    });
   }
 
   translate() {

@@ -85,6 +85,7 @@ export class PlayComponentComponent {
   animationState: string = 'none';
   musicVideo: boolean = false;
   musicVideoSrc!: SafeResourceUrl;
+  volume: number = 50;
   
   Array = Array;
 
@@ -104,7 +105,18 @@ export class PlayComponentComponent {
   
 
   ngOnInit(): void {
-    this.language = localStorage.getItem("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+    this.route.queryParamMap.subscribe(params => {
+      const langParam = params.get('lang');
+      const volParam = params.get('vol');
+  
+      this.language = langParam || localStorage.getItem("language") || 'EN';
+      this.volume = volParam ? Number(volParam) : Number(localStorage.getItem("volume") || 50);
+  
+      localStorage.setItem("language", this.language);
+      localStorage.setItem("volume", this.volume.toString());
+
+      this.translate();
+    });
     this.translate();
     this.timer();
     
