@@ -5,7 +5,7 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { dirname, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -47,6 +47,14 @@ app.use('/**', (req, res, next) => {
       response ? writeResponseToNodeResponse(response, res) : next(),
     )
     .catch(next);
+});
+
+app.get('*', (req, res, next) => {
+  if (req.path === '/play') {
+    // Envía el index.html sin prerenderizar
+    return res.sendFile(join(browserDistFolder, 'index.html'));
+  }
+  next(); // Continúa con SSR para otras rutas
 });
 
 /**
