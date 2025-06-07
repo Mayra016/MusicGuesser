@@ -104,7 +104,7 @@ export class PlayComponentComponent {
   
 
   ngOnInit(): void {
-    this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+    this.language = localStorage.getItem("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
     this.translate();
     this.timer();
     
