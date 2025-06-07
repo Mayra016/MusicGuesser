@@ -1,6 +1,6 @@
 <script src="https://genius.codes"></script>
 <div class="container">
-    <button id="play" class="secondary-font" routerLink="/">{{surrenderTxt}}</button>
+    <button id="play" class="secondary-font" routerLink="/" [queryParams]="{ lang: language, vol: volume }" queryParamsHandling="merge">{{surrenderTxt}}</button>
     <div class="header">
         <p class="score">{{scoreTxt}} {{score}}</p>
         <div class="timer" [@shakeAnimation]="animationState">

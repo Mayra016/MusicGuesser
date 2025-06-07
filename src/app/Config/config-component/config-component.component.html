@@ -1,7 +1,7 @@
 
     <main>
         <div style="text-align:left;">
-            <button class="menu-btn" routerLink="/menu" >{{ menuTxt }}</button>
+            <button class="menu-btn" routerLink="/menu" [queryParams]="{ lang: language, vol: volume }" queryParamsHandling="merge" >{{ menuTxt }}</button>
         </div>
         <div class="game-title">
             <h1>MUSIC GUESSER</h1>
