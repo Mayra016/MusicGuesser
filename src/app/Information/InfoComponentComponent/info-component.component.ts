@@ -22,8 +22,8 @@ export class InfoComponentComponent {
   
 
   ngOnInit(): void {
-    this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
-    this.volume = Number(this.cookies.get("volume") || this.route.snapshot.paramMap.get('vol') || 50);
+    this.language = localStorage.getItem("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+    this.volume = Number(localStorage.getItem("volume") || this.route.snapshot.paramMap.get('vol') || 50);
 
     this.translate();
   }

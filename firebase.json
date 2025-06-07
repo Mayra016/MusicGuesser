@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "dist/music-guesser/",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

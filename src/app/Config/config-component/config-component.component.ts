@@ -36,13 +36,13 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
     constructor(private cookies:CookieService, private route:ActivatedRoute){}
 
     ngOnInit(): void {
-        this.language = this.cookies.get("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
-        this.volume = Number(this.cookies.get("volume") || this.route.snapshot.paramMap.get('vol') || 50);
-        this.graphics = Number(this.cookies.get("graphics") || this.route.snapshot.paramMap.get('graph') || 1);
+        this.language = localStorage.getItem("language") || this.route.snapshot.paramMap.get('lang') || 'EN';
+        this.volume = Number(localStorage.getItem("volume") || this.route.snapshot.paramMap.get('vol') || 50);
+        this.graphics = Number(localStorage.getItem("graphics") || this.route.snapshot.paramMap.get('graph') || 1);
         this.index = Math.max(0, Math.min(2, this.graphics));
 
         if (this.volume != 50) {
-            this.cookies.set("volume", this.volume.toString());
+            localStorage.setItem("volume", this.volume.toString());
         }
 
         this.translate();
@@ -104,7 +104,7 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
         }
 
         this.graphics = this.index;
-        this.cookies.set("graphics", String(this.graphics));
+       localStorage.setItem("graphics", String(this.graphics));
     }
 
     changeLanguage(step:number) {
@@ -118,13 +118,13 @@ export class ConfigComponentComponent implements OnInit, AfterViewInit {
             }
         }
         this.language = this.languages[this.langIndex];
-        this.cookies.set("language", this.language);
+        localStorage.setItem("language", this.language);
         this.translate();
     }
 
     onVolumeChange(newVolume: number) {
         this.volume = newVolume;
-        this.cookies.set("volume", String(newVolume));
+        localStorage.setItem("volume", String(newVolume));
  
     }
 }
