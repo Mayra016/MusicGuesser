@@ -3,18 +3,22 @@
       {
         "source": "/(.*)",
         "headers": [
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "https://tests098763.blogspot.com"
-          },
-          {
+            {
+                "key": "X-Frame-Options",
+                "value": "ALLOW-FROM https://tests098763.blogspot.com"
+            },
+           {
+             "key": "Access-Control-Allow-Origin",
+             "value": "https://tests098763.blogspot.com"
+           },
+           {
             "key": "Access-Control-Allow-Methods",
             "value": "GET, POST, OPTIONS"
           },
-          {
-            "key": "Access-Control-Allow-Headers",
-            "value": "Content-Type"
-          }
+           {
+             "key": "Access-Control-Allow-Headers",
+             "value": "Content-Type"
+           }
         ]
       }
     ]
