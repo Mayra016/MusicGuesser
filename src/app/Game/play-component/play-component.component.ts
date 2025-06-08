@@ -272,7 +272,7 @@ export class PlayComponentComponent {
       });
   }
 
-  @HostListener('document:keydown.enter', ['$event'])
+  @HostListener('window:keydown.enter', ['$event'])
   handleEnter(event: KeyboardEvent) {
     if (!this.won && !this.lost) {
       this.checkUserInput();
