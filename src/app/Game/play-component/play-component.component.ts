@@ -246,7 +246,43 @@ export class PlayComponentComponent {
     });
   }
   
+  autocompleteOVH(music: string) {
+    let link = "https://api.lyrics.ovh/suggest/";
+    link += this.reformatAnswer(music);
+    this.httpClient.get(link).subscribe({
+      next: (response: any) => {
+        this.songs = response?.data?.filter((item: any) => !this.isAlternateVersion(item.title)) 
+        .map((item: any) => {
+          let song = item.title + " by " + item.artist.name;
+          if (song.endsWith(" by Najwa")) {
+            song = song.replace("Najwa", "Najwa Nimri");
+          }
+          return song;
 
+          }
+        ) || [];
+      },
+      error: (err) => {
+        this.songs = [];
+      }
+    });
+  }
+
+  reformatAnswer(answer: string) {
+    this.music = answer;
+    answer = answer.replace(/\s+/g, " ").trim();
+    let lastByIndex = answer.lastIndexOf(" by ");
+    let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
+    let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
+    return song + "-" + artist;
+  }
+
+  isAlternateVersion(title: string) {
+    return /\((.*?(live|remix|extended|version|19\d{2}|20\d{2}).*?)\)/i.test(title);
+  }
+
+  /*
+  API doesn't work on vercel just in 
   autocomplete(music: string) {
     if (!music || music.trim() === '') {
       this.songs = [];
@@ -270,7 +306,7 @@ export class PlayComponentComponent {
           this.songs = [];
         }
       });
-  }
+  }*/
 
   @HostListener('window:keydown.enter', ['$event'])
   handleEnter(event: KeyboardEvent) {
