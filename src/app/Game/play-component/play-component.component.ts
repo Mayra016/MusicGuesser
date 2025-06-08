@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import textEN from '../../translations/textEN';
 import { CookieService } from 'ngx-cookie-service';
@@ -170,7 +170,7 @@ export class PlayComponentComponent {
       this.lostTxt = textDE.lostTitle;
       this.lostScore = textDE.scoreText;
       this.playAgainTxt = textDE.playAgain;
-      this.songTxt = textES.songTxt;
+      this.songTxt = textDE.songTxt;
       this.surrenderTxt = textDE.surrenderTxt;
 
     } else if (this.language == 'PT' || this.language == 'Portuguese') {
@@ -193,7 +193,11 @@ export class PlayComponentComponent {
   // generate letters
   generateLetters() {
     this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
-    this.letters += this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
+    let newLetter = this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
+    while (this.letters.includes(newLetter)) {
+      newLetter = this.availableLetters.charAt(Math.floor((Math.random() * this.availableLetters.length)));
+    }
+    this.letters += newLetter;
   }
 
   selectedSong(selectedSong:string) {
@@ -207,15 +211,13 @@ export class PlayComponentComponent {
     let lastByIndex = answer.lastIndexOf(" by ");
     let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
     let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
-    console.log("MÚSICA 0 " + artist);
-    console.log("MÚSICA 1 " + song);
-    console.log("LINK " + `${this.lyricsApiUrl}/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`);
-    
+
     return `${this.lyricsApiUrl}/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`;
   }
 
-  // fetch lyrics api
-  getLyrics(link:string, callback?: Function) {
+  // fetch lyrics api 
+  /*
+  async getLyrics(link:string, callback?: Function) {
     this.httpClient.get(link).subscribe({
       next: (response: any) => {
         this.lyrics = response.lyrics;
@@ -226,7 +228,24 @@ export class PlayComponentComponent {
         alert("Song not found!");
       }
     });
+  }*/
+
+  async getLyrics(link: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.httpClient.get(link).subscribe({
+        next: (response: any) => {
+          this.lyrics = response.lyrics.toUpperCase();
+          resolve();
+        },
+        error: (err) => {
+          this.music = "";
+          alert("Song not found!");
+          reject(err);
+        }
+      });
+    });
   }
+  
 
   autocomplete(music: string) {
     if (!music || music.trim() === '') {
@@ -237,7 +256,6 @@ export class PlayComponentComponent {
     this.httpClient.get<any>(`${this.autocompleteApiURL}${encodeURIComponent(music)}`)
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response["response"]["hits"][0]); // Debug log
           this.songs = response?.response?.hits?.map(
             (item: any) =>  {
               let song = item.result.title + " by " + item.result.artist_names;
@@ -249,27 +267,41 @@ export class PlayComponentComponent {
           ) || [];
         },
         error: (err) => {
-          console.error('API Error:', err);
           this.songs = [];
         }
       });
   }
 
+  @HostListener('document:keydown.enter', ['$event'])
+  handleEnter(event: KeyboardEvent) {
+    if (!this.won && !this.lost) {
+      this.checkUserInput();
+    }
+    if (this.won && !this.lost) {
+      this.nextLevel();
+    }
+    if (!this.won && this.lost) {
+      this.playAgain();
+    }
+    
+  }
+
   async checkUserInput() {
     this.userWord = this.userWord.split(" ")[0].toUpperCase();
     this.lyrics = this.lyrics.toUpperCase();
-    console.log("SCORE ANTES" + this.userWord);
-    if (this.lyrics == "") {
-      let link = this.generateLinkToLyricsAPI(this.music);
-      await this.getLyrics(link);
-      this.runChecks();
-    } else {
-      this.runChecks();
+
+    if (this.lyrics === "") {
+      const link = this.generateLinkToLyricsAPI(this.music);
+      try {
+        await this.getLyrics(link);
+      } catch (err) {
+        return; 
+      }
     }
+    this.runChecks();
   }
 
   async searchVideo() {
-    console.log("SEARCHING VIDEO");
     let answer = this.music;
     answer = answer.replace(/\s+/g, " ").trim();
     let lastByIndex = answer.lastIndexOf(" by ");
@@ -277,16 +309,16 @@ export class PlayComponentComponent {
     let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
     let songFormated = artist + song;
     let apiKey = "AIzaSyBJnRvYAq8_-a5EfbVdHhMRCbBEBc2VatI";
-    console.log(songFormated);
+
     let googleApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${songFormated}&key=${apiKey}`;
     const response = await fetch(googleApiUrl);
     const data = await response.json();
 
     if (data.items.length > 0) {
       const videoId = data.items[0].id.videoId;
-      if (this.sanitizer) {  // Add this check
+      if (this.sanitizer) {  
         this.musicVideoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=0`);
-        console.log(this.musicVideoSrc);
+
         this.musicVideo = true;
       }
     }
@@ -296,9 +328,11 @@ export class PlayComponentComponent {
     if (!this.userWord.includes(this.letters.charAt(0)) || !this.userWord.includes(this.letters.charAt(1))) {
       alert("The word doesn't contain the letters");
     }
+
     if (!this.lyrics.includes(this.userWord)) {
       alert("The lyrics doesn't contain the word");
     }
+
     if (this.userWord.includes(this.letters.charAt(0)) &&
         this.userWord.includes(this.letters.charAt(1)) &&
         this.lyrics.includes(this.userWord)) {
@@ -313,7 +347,7 @@ export class PlayComponentComponent {
         this.score = 0;    
       }   
     }
-    console.log("SCORE DESPUÉS" + this.score);
+
   }
 
   nextLevel() {

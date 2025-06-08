@@ -33,7 +33,6 @@ export class HomeComponent {
       .subscribe((event: NavigationStart) => {
         this.showMenu = event.url === '/';
       });
-      console.log("show menu", this.showMenu);
   } 
 
   ngAfterViewInit(): void {
