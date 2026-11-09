@@ -7,10 +7,21 @@ import textDE from '../../translations/textDE';
 import textES from '../../translations/textES';
 import textPT from '../../translations/textPT';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { trigger, transition, style, animate, keyframes } from '@angular/animations';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
+interface SongSuggestion {
+  id?: number;
+  title: string;
+  artist: string;
+  album?: string;
+}
+
+interface TrackInfo {
+  title: string;
+  artist: string;
+}
 
 @Component({
   selector: 'app-play-component',
@@ -72,10 +83,9 @@ export class PlayComponentComponent {
   userWord: string = "";
   music: string = "";
   lyrics: string = "";
-  autocompleteApiURL: string = "/genius-api/search?q=";
-  lyricsApiUrl: string = "https://api.lyrics.ovh/v1";
-  autocompleteResult = {};
-  songs: string[] = [];
+  songs: SongSuggestion[] = [];
+  selectedTrack: TrackInfo | null = null;
+  private autocompleteTimer: ReturnType<typeof setTimeout> | null = null;
   won: boolean = false;
   lost: boolean = false;
   score: number = 0;
@@ -200,113 +210,108 @@ export class PlayComponentComponent {
     this.letters += newLetter;
   }
 
-  selectedSong(selectedSong:string) {
-    let link = this.generateLinkToLyricsAPI(selectedSong);
-    this.getLyrics(link);
+  selectedSong(song: SongSuggestion) {
+    this.selectedTrack = { title: song.title, artist: song.artist };
+    this.music = `${song.title} by ${song.artist}`;
+    this.songs = [];
+    this.getLyrics().catch(() => undefined);
   }
 
-  generateLinkToLyricsAPI(answer:string) {
-    this.music = answer;
-    answer = answer.replace(/\s+/g, " ").trim();
-    let lastByIndex = answer.lastIndexOf(" by ");
-    let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
-    let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
+  resolveTrack(): TrackInfo {
+    if (this.selectedTrack) {
+      return this.selectedTrack;
+    }
 
-    return `${this.lyricsApiUrl}/${encodeURIComponent(artist)}/${encodeURIComponent(song)}`;
+    const text = (this.music || '').replace(/\s+/g, ' ').trim();
+    const lastByIndex = text.toLowerCase().lastIndexOf(' by ');
+
+    if (lastByIndex >= 0) {
+      return {
+        title: text.substring(0, lastByIndex).trim(),
+        artist: text.substring(lastByIndex + 4).trim()
+      };
+    }
+
+    return { title: text, artist: '' };
   }
 
-  // fetch lyrics api 
-  /*
-  async getLyrics(link:string, callback?: Function) {
-    this.httpClient.get(link).subscribe({
-      next: (response: any) => {
-        this.lyrics = response.lyrics;
-        console.log("HOLAAA" + this.lyrics);
-      },
-      error: (err) =>  {
-        this.music = "";
-        alert("Song not found!");
-      }
-    });
-  }*/
+  async getLyrics(): Promise<void> {
+    const track = this.resolveTrack();
+    let params = new HttpParams();
 
-  async getLyrics(link: string): Promise<void> {
+    if (track.title) {
+      params = params.set('title', track.title);
+    }
+    if (track.artist) {
+      params = params.set('artist', track.artist);
+    }
+    if (this.music) {
+      params = params.set('q', this.music);
+    }
+
     return new Promise((resolve, reject) => {
-      this.httpClient.get(link).subscribe({
-        next: (response: any) => {
+      this.httpClient.get<{ lyrics?: string }>('/api/lyrics', { params }).subscribe({
+        next: (response) => {
+          if (!response || !response.lyrics) {
+            this.lyrics = '';
+            alert('Song not found!');
+            reject(new Error('No lyrics returned'));
+            return;
+          }
+
           this.lyrics = response.lyrics.toUpperCase();
           resolve();
         },
         error: (err) => {
-          this.music = "";
-          alert("Song not found!");
+          if (err?.status === 404) {
+            alert('Song not found!');
+          } else {
+            alert('The music service is unavailable. Please try again.');
+          }
           reject(err);
         }
       });
     });
   }
-  
-  autocompleteOVH(music: string) {
-    let link = "https://api.lyrics.ovh/suggest/";
-    link += this.reformatAnswer(music);
-    this.httpClient.get(link).subscribe({
-      next: (response: any) => {
-        this.songs = response?.data?.filter((item: any) => !this.isAlternateVersion(item.title)) 
-        .map((item: any) => {
-          let song = item.title + " by " + item.artist.name;
-          if (song.endsWith(" by Najwa")) {
-            song = song.replace("Najwa", "Najwa Nimri");
-          }
-          return song;
 
-          }
-        ) || [];
-      },
-      error: (err) => {
-        this.songs = [];
-      }
-    });
-  }
+  searchSongs(music: string) {
+    this.music = music;
+    this.selectedTrack = null;
+    this.lyrics = '';
 
-  reformatAnswer(answer: string) {
-    this.music = answer;
-    answer = answer.replace(/\s+/g, " ").trim();
-    let lastByIndex = answer.lastIndexOf(" by ");
-    let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
-    let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
-    return song + "-" + artist;
+    if (this.autocompleteTimer) {
+      clearTimeout(this.autocompleteTimer);
+      this.autocompleteTimer = null;
+    }
+
+    const query = (music || '').replace(/\s+/g, ' ').trim();
+
+    if (!query) {
+      this.songs = [];
+      return;
+    }
+
+    this.autocompleteTimer = setTimeout(() => {
+      this.httpClient
+        .get<{ songs?: SongSuggestion[] }>('/api/search', {
+          params: new HttpParams().set('q', query)
+        })
+        .subscribe({
+          next: (response) => {
+            this.songs = (response?.songs || []).filter(
+              (song) => !this.isAlternateVersion(song.title)
+            );
+          },
+          error: () => {
+            this.songs = [];
+          }
+        });
+    }, 300);
   }
 
   isAlternateVersion(title: string) {
     return /\((.*?(live|remix|extended|version|19\d{2}|20\d{2}).*?)\)/i.test(title);
   }
-
-  /*
-  API doesn't work on vercel just in 
-  autocomplete(music: string) {
-    if (!music || music.trim() === '') {
-      this.songs = [];
-      return;
-    }
-  
-    this.httpClient.get<any>(`${this.autocompleteApiURL}${encodeURIComponent(music)}`)
-      .subscribe({
-        next: (response) => {
-          this.songs = response?.response?.hits?.map(
-            (item: any) =>  {
-              let song = item.result.title + " by " + item.result.artist_names;
-                if (song.endsWith(" by Najwa")) {
-                  song = song.replace("Najwa", "Najwa Nimri");
-                }
-                return song;
-            } 
-          ) || [];
-        },
-        error: (err) => {
-          this.songs = [];
-        }
-      });
-  }*/
 
   @HostListener('window:keydown.enter', ['$event'])
   handleEnter(event: KeyboardEvent) {
@@ -327,32 +332,27 @@ export class PlayComponentComponent {
     this.lyrics = this.lyrics.toUpperCase();
 
     if (this.lyrics === "") {
-      const link = this.generateLinkToLyricsAPI(this.music);
       try {
-        await this.getLyrics(link);
+        await this.getLyrics();
       } catch (err) {
-        return; 
+        return;
       }
     }
     this.runChecks();
   }
 
   async searchVideo() {
-    let answer = this.music;
-    answer = answer.replace(/\s+/g, " ").trim();
-    let lastByIndex = answer.lastIndexOf(" by ");
-    let song = answer.substring(0, lastByIndex).trim().replace(/ /g, "-");
-    let artist = answer.substring(lastByIndex + 4).trim().replace(/ /g, "-"); 
-    let songFormated = artist + song;
-    let apiKey = "REDACTED_GOOGLE_API_KEY";
+    const track = this.resolveTrack();
+    const songFormated = `${track.artist} ${track.title}`.trim();
+    const apiKey = "REDACTED_GOOGLE_API_KEY";
 
-    let googleApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${songFormated}&key=${apiKey}`;
+    const googleApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${encodeURIComponent(songFormated)}&key=${apiKey}`;
     const response = await fetch(googleApiUrl);
     const data = await response.json();
 
     if (data.items.length > 0) {
       const videoId = data.items[0].id.videoId;
-      if (this.sanitizer) {  
+      if (this.sanitizer) {
         this.musicVideoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=0`);
 
         this.musicVideo = true;
@@ -406,7 +406,11 @@ export class PlayComponentComponent {
     this.lyrics = "";
     this.letters = "";
     this.songs = [];
-    this.autocompleteResult = {};
+    this.selectedTrack = null;
+    if (this.autocompleteTimer) {
+      clearTimeout(this.autocompleteTimer);
+      this.autocompleteTimer = null;
+    }
     this.seconds = 60;
     this.generateLetters();
   }

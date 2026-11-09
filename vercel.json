@@ -1,25 +1,43 @@
 {
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-            {
-                "key": "X-Frame-Options",
-                "value": "ALLOW-FROM https://tests098763.blogspot.com"
-            },
-           {
-             "key": "Access-Control-Allow-Origin",
-             "value": "https://tests098763.blogspot.com"
-           },
-           {
-            "key": "Access-Control-Allow-Methods",
-            "value": "GET, POST, OPTIONS"
-          },
-           {
-             "key": "Access-Control-Allow-Headers",
-             "value": "Content-Type"
-           }
-        ]
-      }
-    ]
-  }
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "ALLOW-FROM https://tests098763.blogspot.com"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://tests098763.blogspot.com"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/play",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/menu",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/info",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/config",
+      "destination": "/index.html"
+    }
+  ]
+}
