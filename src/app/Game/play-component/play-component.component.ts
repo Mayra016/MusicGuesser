@@ -344,19 +344,19 @@ export class PlayComponentComponent {
   async searchVideo() {
     const track = this.resolveTrack();
     const songFormated = `${track.artist} ${track.title}`.trim();
-    const apiKey = "REDACTED_GOOGLE_API_KEY";
 
-    const googleApiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=1&q=${encodeURIComponent(songFormated)}&key=${apiKey}`;
-    const response = await fetch(googleApiUrl);
+    const response = await fetch(`/api/youtube?q=${encodeURIComponent(songFormated)}`);
+
+    if (!response.ok) {
+      return;
+    }
+
     const data = await response.json();
+    const videoId = data?.videoId;
 
-    if (data.items.length > 0) {
-      const videoId = data.items[0].id.videoId;
-      if (this.sanitizer) {
-        this.musicVideoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=0`);
-
-        this.musicVideo = true;
-      }
+    if (videoId && this.sanitizer) {
+      this.musicVideoSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`https://www.youtube.com/embed/${videoId}?autoplay=0`);
+      this.musicVideo = true;
     }
   }
 
